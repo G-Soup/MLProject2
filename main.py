@@ -73,8 +73,8 @@ print("Logistic Regression Test set score: {:.2f}%".format(
 
 # SVM
 # Create classifier object: Create a nonlinear SVM classifier
-# kernel, default=’rbf’ = radial basis function
-svc = SVC(C=10, gamma='auto', random_state=100)
+# kernel, linear
+svc = SVC(C=10, gamma='auto', random_state=100, kernel='linear')
 svc.fit(X_train, y_train)
 print("SVM Gaussian Training set score: {:.2f}%".format(
     100*svc.score(X_train, y_train)))
