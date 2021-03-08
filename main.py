@@ -16,9 +16,13 @@ from pandas.plotting import scatter_matrix
 # Question 1
 print("1. The dataset has 7 features")
 
-
 # Setting up training data
 claims = pd.read_csv('COVIDClaimsTrimmed.csv')
+
+print(claims['State'].unique())
+lookup_state_code = dict(
+    zip(claims['State'].unique(), range(1, 55))
+)
 
 X = claims[['Claims Paid for Testing',
             'Claims Paid for Treatment', 'Claims Paid for Vaccine']]
@@ -39,13 +43,17 @@ testSize = 0.25
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=testSize, random_state=42)
 
+yNums = []
+for k in y_train:
+    yNums.append(lookup_state_code[k])
+
 cmap = cm.get_cmap('gnuplot')
-scatter = scatter_matrix(X_train, marker='o', s=40, hist_kwds={
+scatter = scatter_matrix(X_train, c=yNums, marker='o', s=40, hist_kwds={
                          'bins': 15}, figsize=(9, 9), cmap=cmap)
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(X_train['Claims Paid for Testing'], X_train['Claims Paid for Treatment'], X_train['Claims Paid for Vaccine'],
+ax.scatter(X_train['Claims Paid for Testing'], X_train['Claims Paid for Treatment'], X_train['Claims Paid for Vaccine'], c=yNums,
            marker='o', s=100)
 ax.set_xlabel('Claims Paid for Testing')
 ax.set_ylabel('Claims Paid for Treatment')
